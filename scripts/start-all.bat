@@ -7,7 +7,7 @@ echo.
 :: %~dp0 pega a pasta atual do script exato (scripts\), .. sobe para raiz
 cd /d "%~dp0.."
 
-echo [1/2] Iniciando o Backend API (Porta 3000)...
+echo [1/2] Iniciando o Backend API (Porta 4110)...
 start "Backend - API" cmd /k "cd server && npm run dev"
 
 echo.
