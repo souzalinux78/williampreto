@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `leadlog` ADD COLUMN `date` VARCHAR(191) NULL,
+    ADD COLUMN `email` VARCHAR(191) NULL,
+    ADD COLUMN `message` TEXT NULL,
+    ADD COLUMN `type` VARCHAR(191) NULL;

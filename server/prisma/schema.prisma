@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  id                Int      @id @default(autoincrement())
+  photographerName  String   @default("William Preto")
+  whatsapp          String   @default("11 99793-1526")
+  instagram         String   @default("williampreto_fotografo")
+  cityRegion        String   @default("Bragança Paulista e Região")
+  institutionalText String   @db.Text
+  ctaText           String   @default("Falar com William Preto")
+  seoTitle          String   @default("William Preto Fotógrafo | Especialista em Gestantes e Família")
+  seoDescription    String   @default("Fotógrafo premiado internacionalmente especializado em gestantes, família e casamentos.")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model HeroSection {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.Text
+  subtitle  String   @db.Text
+  badgeText String   @default("Premiado Internacionalmente 2020–2025")
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @db.Text
+  imageUrl    String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Award {
+  id        Int      @id @default(autoincrement())
+  name      String
+  year      Int
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PortfolioCategory {
+  id        Int             @id @default(autoincrement())
+  name      String
+  active    Boolean         @default(true)
+  items     PortfolioItem[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model PortfolioItem {
+  id         Int               @id @default(autoincrement())
+  title      String?
+  imageUrl   String
+  active     Boolean           @default(true)
+  categoryId Int
+  category   PortfolioCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String   // Ex: Gestante, Casamento Civil
+  text      String   @db.Text
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id        Int      @id @default(autoincrement())
+  question  String   @db.Text
+  answer    String   @db.Text
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LeadLog {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String?
+  phone     String?
+  type      String?  // Tipo de ensaio
+  date      String?  // Data prevista
+  message   String?  @db.Text
+  source    String?  // Ex: WhatsApp Button, Formulario Contato
+  createdAt DateTime @default(now())
+}
