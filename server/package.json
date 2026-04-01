@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "node prisma/seed.js",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "start:prod": "NODE_ENV=production node src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

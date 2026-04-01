@@ -42,7 +42,7 @@ const Sobre = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
               className="aspect-[3/4] bg-primary-100 bg-cover bg-center shadow-2xl relative" 
-              style={{ backgroundImage: `url(${heroSection.imageUrl && heroSection.imageUrl.startsWith('/uploads') ? `http://localhost:3000${heroSection.imageUrl}` : heroSection.imageUrl || '/hero.png'})` }}
+              style={{ backgroundImage: `url(${heroSection.imageUrl && heroSection.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${heroSection.imageUrl}` : heroSection.imageUrl || '/hero.png'})` }}
             >
                <div className="absolute -bottom-6 -right-6 w-1/2 aspect-square bg-primary-900 border-4 border-white flex flex-col items-center justify-center p-6 text-center text-white">
                   <span className="font-serif text-3xl italic">{awards.length}</span>

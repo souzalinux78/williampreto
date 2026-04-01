@@ -51,7 +51,7 @@ const AboutSection = ({ data, heroImage }) => {
             className="relative"
           >
             <div className="aspect-[4/5] bg-primary-200 shadow-xl overflow-hidden rounded-sm relative z-10 w-4/5 ml-auto">
-              <img src={heroImage && heroImage.startsWith('/uploads') ? `http://localhost:3000${heroImage}` : heroImage || '/hero.png'} alt="A Essência" className="w-full h-full object-cover" />
+              <img src={heroImage && heroImage.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${heroImage}` : heroImage || '/hero.png'} alt="A Essência" className="w-full h-full object-cover" />
             </div>
             <div className="absolute -top-10 -left-10 w-full h-full bg-primary-100 z-0"></div>
             

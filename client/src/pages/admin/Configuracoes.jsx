@@ -121,7 +121,7 @@ const Configuracoes = () => {
               <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full border p-2 rounded-md mb-2" />
               {hero.imageUrl && (
                  <div className="w-full h-32 bg-gray-200 rounded-md overflow-hidden flex items-center justify-center">
-                    <img src={hero.imageUrl.startsWith('/uploads') ? `http://localhost:3000${hero.imageUrl}` : hero.imageUrl} alt="Hero Preview" className="h-full object-cover" />
+                    <img src={hero.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${hero.imageUrl}` : hero.imageUrl} alt="Hero Preview" className="h-full object-cover" />
                  </div>
               )}
             </div>

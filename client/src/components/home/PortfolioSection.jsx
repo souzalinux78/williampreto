@@ -43,7 +43,7 @@ const PortfolioSection = ({ data = [] }) => {
              >
                <div 
                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-105"
-                 style={{ backgroundImage: `url(${img.imageUrl && img.imageUrl.startsWith('/uploads') ? `http://localhost:3000${img.imageUrl}` : img.imageUrl || '/maternity.png'})` }}
+                 style={{ backgroundImage: `url(${img.imageUrl && img.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${img.imageUrl}` : img.imageUrl || '/maternity.png'})` }}
                />
                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500" />
                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">

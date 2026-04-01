@@ -83,7 +83,7 @@ const Portfolio = () => {
                   className="group relative cursor-pointer overflow-hidden aspect-[4/5] bg-gray-200"
                 >
                   <img 
-                    src={item.imageUrl.startsWith('/uploads') ? `http://localhost:3000${item.imageUrl}` : item.imageUrl} 
+                    src={item.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${item.imageUrl}` : item.imageUrl} 
                     alt={item.title || item.category?.name} 
                     className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
                     loading="lazy"
@@ -130,7 +130,7 @@ const Portfolio = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
-              src={filteredItems[lightboxIndex].imageUrl.startsWith('/uploads') ? `http://localhost:3000${filteredItems[lightboxIndex].imageUrl}` : filteredItems[lightboxIndex].imageUrl}
+              src={filteredItems[lightboxIndex].imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${filteredItems[lightboxIndex].imageUrl}` : filteredItems[lightboxIndex].imageUrl}
               alt="Enlarged"
               className="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl"
               onClick={(e) => e.stopPropagation()}

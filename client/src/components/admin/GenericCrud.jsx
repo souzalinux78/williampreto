@@ -124,7 +124,7 @@ const GenericCrud = ({ title, endpoint, fields }) => {
                 {fields.filter(f => !f.hideInTable).map(f => (
                   <td key={f.name} className="p-4 text-sm text-gray-700 max-w-xs truncate">
                     {f.type === 'image' && item[f.name] ? (
-                       <img src={item[f.name].startsWith('/uploads') ? `http://localhost:3000${item[f.name]}` : item[f.name]} alt="preview" className="h-10 w-10 object-cover rounded-sm border" />
+                       <img src={item[f.name].startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${item[f.name]}` : item[f.name]} alt="preview" className="h-10 w-10 object-cover rounded-sm border" />
                     ) : f.type === 'boolean' ? (
                        <span className={`px-2 py-1 text-xs rounded-full ${item[f.name] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{item[f.name] ? 'Sim' : 'Não'}</span>
                     ) : (
@@ -179,7 +179,7 @@ const GenericCrud = ({ title, endpoint, fields }) => {
                     ) : f.type === 'image' ? (
                       <div>
                         <input type="file" accept="image/*" onChange={e => handleImageUpload(e, f.name)} className="mb-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"/>
-                        {formData[f.name] && <img src={formData[f.name].startsWith('/uploads') ? `http://localhost:3000${formData[f.name]}` : formData[f.name]} alt="preview" className="h-24 w-auto object-contain border rounded-sm" />}
+                        {formData[f.name] && <img src={formData[f.name].startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${formData[f.name]}` : formData[f.name]} alt="preview" className="h-24 w-auto object-contain border rounded-sm" />}
                       </div>
                     ) : f.type === 'select' ? (
                       <select 

@@ -46,7 +46,7 @@ const ServicesSection = ({ data = [], whatsapp }) => {
              >
                <div 
                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] group-hover:scale-105"
-                 style={{ backgroundImage: `url(${srv.imageUrl && srv.imageUrl.startsWith('/uploads') ? `http://localhost:3000${srv.imageUrl}` : srv.imageUrl || '/maternity.png'})` }}
+                 style={{ backgroundImage: `url(${srv.imageUrl && srv.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${srv.imageUrl}` : srv.imageUrl || '/maternity.png'})` }}
                />
                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/40 to-transparent" />
                <div className="relative z-10">

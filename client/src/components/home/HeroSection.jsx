@@ -7,7 +7,7 @@ const HeroSection = ({ data, settings }) => {
       {/* Background Image */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: `url('${data?.imageUrl && data.imageUrl.startsWith('/uploads') ? `http://localhost:3000${data.imageUrl}` : data.imageUrl || '/maternity.png'}')` }}
+        style={{ backgroundImage: `url('${data?.imageUrl && data.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.imageUrl}` : data.imageUrl || '/maternity.png'}')` }}
       >
         {/* Gradient Overlay for sophisticated dark mode look */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
