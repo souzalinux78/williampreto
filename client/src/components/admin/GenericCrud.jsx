@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Plus, Edit2, Trash2, X, Save, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, AlertCircle, CheckCircle2, Loader2, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const GenericCrud = ({ title, endpoint, fields }) => {
