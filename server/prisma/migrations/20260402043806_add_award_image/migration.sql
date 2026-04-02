@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `award` ADD COLUMN `imageUrl` VARCHAR(191) NULL;
+ALTER TABLE `Award` ADD COLUMN `imageUrl` VARCHAR(191) NULL;
