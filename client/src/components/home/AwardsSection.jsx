@@ -22,19 +22,28 @@ const AwardsSection = ({ data = [] }) => {
           </h3>
           
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-90 mx-auto max-w-5xl">
-            {/* Elegant badge representations for text-based awards without images */}
-            {data.map((award) => (
-              <div key={award.id} className="flex flex-col items-center">
-                 <div className="w-16 h-16 rounded-full border border-primary-500/50 flex items-center justify-center mb-3 text-primary-200">
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                     <circle cx="12" cy="8" r="7"></circle>
-                     <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                   </svg>
-                 </div>
-                 <span className="text-white text-xs font-light tracking-[0.2em] uppercase text-center">{award.name}</span>
-                 <span className="text-accent text-lg font-serif">{award.year}</span>
-              </div>
-            ))}
+            {/* Elegant badge representations for text-based awards or images if available */}
+            {data.map((award) => {
+              const apiBaseUrl = import.meta.env.VITE_API_URL.replace('/api', '');
+              const imgUrl = award.imageUrl ? (award.imageUrl.startsWith('/uploads') ? `${apiBaseUrl}${award.imageUrl}` : award.imageUrl) : null;
+              
+              return (
+                <div key={award.id} className="flex flex-col items-center group">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl border border-primary-500/30 flex items-center justify-center mb-4 text-primary-200 overflow-hidden bg-primary-800/20 group-hover:border-accent/40 transition-all shadow-xl shadow-black/20 group-hover:scale-105">
+                    {imgUrl ? (
+                      <img src={imgUrl} alt={award.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" className="opacity-40">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-white text-[10px] md:text-sm font-light tracking-[0.2em] uppercase text-center max-w-[120px] mb-1">{award.name}</span>
+                  <span className="text-accent text-lg font-serif">{award.year}</span>
+                </div>
+              );
+            })}
           </div>
 
           <p className="text-primary-200/60 font-light mt-16 max-w-xl mx-auto italic text-sm">
