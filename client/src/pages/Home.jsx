@@ -34,6 +34,19 @@ const Home = () => {
 
   const { siteSettings, heroSection, services, awards, portfolioItems, testimonials, faqs } = data;
 
+  if (!siteSettings) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-10 text-center">
+         <h1 className="text-2xl font-serif text-red-800 mb-4">A página inicial não pôde ser carregada</h1>
+         <p className="text-gray-600 mb-8 max-w-lg">Isso geralmente acontece após uma atualização que exige sincronização com o banco de dados. Por favor, execute as migrações necessárias.</p>
+         <code className="bg-gray-100 p-4 rounded text-xs text-left mb-8 block overflow-auto max-w-full">
+            ERRO: {data.details || 'Falha na resposta do servidor'}
+         </code>
+         <button onClick={() => window.location.reload()} className="bg-primary-600 text-white px-8 py-3 rounded-full hover:bg-black transition-colors font-bold uppercase tracking-widest text-xs">Tentar novamente</button>
+      </div>
+    );
+  }
+
   const schemaOrgJSONLD = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",

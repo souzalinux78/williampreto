@@ -33,28 +33,31 @@ const PortfolioSection = ({ data = [] }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {images.slice(0, 4).map((img, idx) => (
-             <Link key={img.id || idx} to="/portfolio">
-               <motion.div 
-                 initial={{ opacity: 0, scale: 0.95 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true, margin: '-50px' }}
-                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                 className="group overflow-hidden rounded-sm relative aspect-[4/3] bg-primary-100 cursor-pointer"
-               >
-                 <div 
-                   className="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-105"
-                   style={{ backgroundImage: `url(${img.imageUrl && img.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${img.imageUrl}` : img.imageUrl || '/maternity.png'})` }}
-                 />
-                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500" />
-                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                   <span className="text-white font-serif text-2xl uppercase tracking-widest px-8 py-3 border border-white/60 drop-shadow-md text-center">
-                     {img.title || img.category?.name}
-                   </span>
-                 </div>
-               </motion.div>
-             </Link>
-          ))}
+          {images.slice(0, 4).map((img, idx) => {
+             const categoryName = img.title || img.category?.name || 'Todas';
+             return (
+               <Link key={img.id || idx} to={`/portfolio?cat=${encodeURIComponent(categoryName)}`}>
+                 <motion.div 
+                   initial={{ opacity: 0, scale: 0.95 }}
+                   whileInView={{ opacity: 1, scale: 1 }}
+                   viewport={{ once: true, margin: '-50px' }}
+                   transition={{ duration: 0.6, delay: idx * 0.1 }}
+                   className="group overflow-hidden rounded-sm relative aspect-[4/3] bg-primary-100 cursor-pointer"
+                 >
+                   <div 
+                     className="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-105"
+                     style={{ backgroundImage: `url(${img.imageUrl && img.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${img.imageUrl}` : img.imageUrl || '/maternity.png'})` }}
+                   />
+                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500" />
+                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                     <span className="text-white font-serif text-2xl uppercase tracking-widest px-8 py-3 border border-white/60 drop-shadow-md text-center">
+                       {categoryName}
+                     </span>
+                   </div>
+                 </motion.div>
+               </Link>
+             );
+          })}
         </div>
         
         <div className="mt-12 text-center md:hidden">

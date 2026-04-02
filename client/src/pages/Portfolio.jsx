@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import Section from '../components/Section';
 import Loading from '../components/Loading';
 
@@ -10,8 +11,18 @@ const Portfolio = () => {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('Todas');
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
+    // Pegar categoria da URL se existir
+    const params = new URLSearchParams(location.search);
+    const catParam = params.get('cat');
+    if (catParam) {
+      setActiveCategory(catParam);
+    }
+
     fetch(`${import.meta.env.VITE_API_URL}/public/home-data`)
       .then(res => res.json())
       .then(d => {
@@ -22,7 +33,7 @@ const Portfolio = () => {
         console.error(e);
         setLoading(false);
       });
-  }, []);
+  }, [location.search]);
 
   if (loading || !data) return <Loading />;
 
@@ -52,7 +63,7 @@ const Portfolio = () => {
         <meta name="description" content="Explore nosso acervo de fotografias de gestantes, casamentos, famílias e eventos. Amor e sensibilidade em formato de arte." />
       </Helmet>
 
-      <div className="pt-24 min-h-screen bg-gray-50/50">
+      <div className="pt-32 min-h-screen bg-gray-50/50">
         <Section title="Acervo Fotográfico" subtitle="Nossa Arte" bgLight={true}>
           
           {/* Filters */}
