@@ -17,6 +17,7 @@ const AdminLayout = () => {
     { path: '/admin/servicos', icon: <Camera size={20}/>, label: 'Serviços' },
     { path: '/admin/premios', icon: <Award size={20}/>, label: 'Prêmios' },
     { path: '/admin/portfolio', icon: <MapPin size={20}/>, label: 'Portfólio' },
+    { path: '/admin/portfolio-categorias', icon: <Settings size={20}/>, label: 'Categorias' },
     { path: '/admin/depoimentos', icon: <MessageSquare size={20}/>, label: 'Depoimentos' },
     { path: '/admin/faqs', icon: <HelpCircle size={20}/>, label: 'FAQs' },
   ];

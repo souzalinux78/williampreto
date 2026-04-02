@@ -23,6 +23,7 @@ const Configuracoes = React.lazy(() => import('./pages/admin/Configuracoes'));
 const Servicos = React.lazy(() => import('./pages/admin/Servicos'));
 const Premios = React.lazy(() => import('./pages/admin/Premios'));
 const AdminPortfolio = React.lazy(() => import('./pages/admin/Portfolio'));
+const PortfolioCategorias = React.lazy(() => import('./pages/admin/Categorias'));
 const Depoimentos = React.lazy(() => import('./pages/admin/Depoimentos'));
 const Faqs = React.lazy(() => import('./pages/admin/Faqs'));
 
@@ -51,6 +52,7 @@ function AppContent() {
                 <Route path="servicos" element={<Servicos />} />
                 <Route path="premios" element={<Premios />} />
                 <Route path="portfolio" element={<AdminPortfolio />} />
+                <Route path="portfolio-categorias" element={<PortfolioCategorias />} />
                 <Route path="depoimentos" element={<Depoimentos />} />
                 <Route path="faqs" element={<Faqs />} />
               </Route>

@@ -57,7 +57,9 @@ const createCrudRoutes = (entityName, modelName) => {
   // Obter um
   router.get(`/${entityName}/:id`, async (req, res) => {
     try {
-      const item = await model.findUnique({ where: { id: parseInt(req.params.id) } });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+      const item = await model.findUnique({ where: { id } });
       res.json(item);
     } catch (e) { res.status(500).json({ error: `Erro ao buscar ${entityName}` }); }
   });
@@ -65,26 +67,53 @@ const createCrudRoutes = (entityName, modelName) => {
   // Criar
   router.post(`/${entityName}`, async (req, res) => {
     try {
-      const item = await model.create({ data: req.body });
+      const { id, createdAt, updatedAt, ...data } = req.body;
+      
+      // Auto-parse numeric IDs in body (ex: categoryId)
+      Object.keys(data).forEach(key => {
+        if (key.endsWith('Id') && typeof data[key] === 'string' && data[key] !== '') {
+          data[key] = parseInt(data[key], 10);
+        }
+      });
+
+      const item = await model.create({ data });
       res.json(item);
-    } catch (e) { res.status(500).json({ error: `Erro ao criar ${entityName}`, details: e.message }); }
+    } catch (e) { 
+      res.status(500).json({ error: `Erro ao criar ${entityName}`, details: e.message }); 
+    }
   });
 
   // Atualizar
   router.put(`/${entityName}/:id`, async (req, res) => {
     try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+
+      const { id: _, createdAt, updatedAt, ...data } = req.body;
+      
+      // Auto-parse numeric IDs in body (ex: categoryId)
+      Object.keys(data).forEach(key => {
+        if (key.endsWith('Id') && typeof data[key] === 'string' && data[key] !== '') {
+          data[key] = parseInt(data[key], 10);
+        }
+      });
+
       const item = await model.update({
-        where: { id: parseInt(req.params.id) },
-        data: req.body
+        where: { id },
+        data
       });
       res.json(item);
-    } catch (e) { res.status(500).json({ error: `Erro ao atualizar ${entityName}`, details: e.message }); }
+    } catch (e) { 
+      res.status(500).json({ error: `Erro ao atualizar ${entityName}`, details: e.message }); 
+    }
   });
 
   // Deletar
   router.delete(`/${entityName}/:id`, async (req, res) => {
     try {
-      await model.delete({ where: { id: parseInt(req.params.id) } });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+      await model.delete({ where: { id } });
       res.json({ success: true });
     } catch (e) { res.status(500).json({ error: `Erro ao deletar ${entityName}` }); }
   });
