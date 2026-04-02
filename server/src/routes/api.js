@@ -28,8 +28,8 @@ router.get('/home-data', async (req, res) => {
       faqs
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao buscar dados da página inicial' });
+    console.error('ERRO CRÍTICO NO BACKEND:', error);
+    res.status(500).json({ error: 'Erro ao buscar dados da página inicial', details: error.message });
   }
 });
 
