@@ -19,7 +19,7 @@ const Home = () => {
     fetch(`${import.meta.env.VITE_API_URL}/public/home-data`)
       .then(r => r.json())
       .then(d => {
-        setData(d);
+        setData(d || {});
         setLoading(false);
       })
       .catch(e => {
@@ -32,69 +32,25 @@ const Home = () => {
     return <Loading />;
   }
 
-  const { siteSettings, heroSection, services, awards, portfolioItems, testimonials, faqs, landingPageSections, whyChooseItems } = data;
-
-  if (!siteSettings) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-10 text-center">
-         <h1 className="text-2xl font-serif text-red-800 mb-4">A página inicial não pôde ser carregada</h1>
-         <p className="text-gray-600 mb-8 max-w-lg">Isso geralmente acontece após uma atualização que exige sincronização com o banco de dados. Por favor, execute as migrações necessárias.</p>
-         <code className="bg-gray-100 p-4 rounded text-xs text-left mb-8 block overflow-auto max-w-full">
-            ERRO: {data.details || 'Falha na resposta do servidor'}
-         </code>
-         <button onClick={() => window.location.reload()} className="bg-primary-600 text-white px-8 py-3 rounded-full hover:bg-black transition-colors font-bold uppercase tracking-widest text-xs">Tentar novamente</button>
-      </div>
-    );
-  }
-
-  const schemaOrgJSONLD = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": siteSettings.photographerName,
-    "image": heroSection.imageUrl,
-    "description": siteSettings.seoDescription,
-    "telephone": siteSettings.whatsapp,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": siteSettings.cityRegion.split('-')[0].trim(),
-      "addressRegion": "SP",
-      "addressCountry": "BR"
-    },
-    "priceRange": "$$",
-    "sameAs": [
-      `https://www.instagram.com/${siteSettings.instagram}` 
-    ]
-  };
+  const { siteSettings, heroSection, services, awards, portfolioItems, testimonials } = data;
 
   return (
     <>
       <Helmet>
-        <title>{siteSettings.seoTitle}</title>
-        <meta name="description" content={siteSettings.seoDescription} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.williampreto.com.br/" />
-        <meta property="og:title" content={siteSettings.seoTitle} />
-        <meta property="og:description" content={siteSettings.seoDescription} />
-        <meta property="og:image" content={heroSection.imageUrl} />
-        
-        {/* Schema.org */}
-        <script type="application/ld+json">
-          {JSON.stringify(schemaOrgJSONLD)}
-        </script>
+        <title>{siteSettings?.seoTitle || "William Preto Fotógrafo | Especialista em Gestantes e Família"}</title>
+        <meta name="description" content={siteSettings?.seoDescription || "Fotógrafo premiado internacionalmente especializado em gestantes, família e casamentos."} />
       </Helmet>
       
       <div className="min-h-screen">
-        <HeroSection data={heroSection} settings={siteSettings} />
-        <AboutSection data={siteSettings} heroImage={heroSection.imageUrl} sectionData={landingPageSections} />
-        <ServicesSection data={services} whatsapp={siteSettings.whatsapp} />
-        <AwardsSection data={awards} />
-        <WhyChooseSection data={whyChooseItems} sectionData={landingPageSections} />
-        <PortfolioSection data={portfolioItems} />
-        <TestimonialsSection data={testimonials} sectionData={landingPageSections} />
-        <LocationSection city={siteSettings.cityRegion} sectionData={landingPageSections} />
-        <CtaSection texts={siteSettings} />
+        <HeroSection data={heroSection || {}} settings={siteSettings || {}} />
+        <AboutSection heroImage={heroSection?.imageUrl || "/hero.png"} />
+        <ServicesSection data={services || []} whatsapp={siteSettings?.whatsapp || "11997931526"} />
+        <AwardsSection data={awards || []} />
+        <WhyChooseSection data={[]} />
+        <PortfolioSection data={portfolioItems || []} />
+        <TestimonialsSection data={testimonials || []} />
+        <LocationSection city={siteSettings?.cityRegion || "Bragança Paulista"} />
+        <CtaSection texts={siteSettings || {}} />
       </div>
     </>
   );
