@@ -4,9 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 const PortfolioSection = ({ data, sectionData }) => {
   const [activeCategory, setActiveCategory] = useState('Todos');
 
-  const title = sectionData?.portfolioTitle || "Explore Nosso Universo Atemporal";
-  const subtitle = sectionData?.portfolioSubtitle || "Cada clique é uma história contada através da luz e da emoção. Conheça alguns dos nossos trabalhos mais recentes.";
-
   const categories = ['Todos', ...new Set(data.map(item => item.category?.name || item.type))];
 
   const filteredItems = activeCategory === 'Todos'
@@ -25,10 +22,15 @@ const PortfolioSection = ({ data, sectionData }) => {
           >
             <span className="text-primary-600 font-sans tracking-[0.2em] text-xs uppercase font-medium mb-4 block">Portfólio</span>
             <h2 className="text-4xl md:text-5xl font-serif text-primary-900 font-light mb-8 leading-tight">
-              {title}
+              {sectionData?.portfolioTitle ? (
+                 <span dangerouslySetInnerHTML={{ __html: sectionData.portfolioTitle.replace(/\n/g, '<br/>') }} />
+              ) : (
+                <>Explore <span className="italic text-primary-600">Nosso Universo </span>
+                Atemporatrial.</>
+              )}
             </h2>
             <p className="text-primary-700 text-lg font-light leading-relaxed">
-              {subtitle}
+              {sectionData?.portfolioSubtitle || "Cada clique é uma história contada através da luz e da emoção. Conheça alguns dos nossos trabalhos mais recentes."}
             </p>
           </motion.div>
         </div>

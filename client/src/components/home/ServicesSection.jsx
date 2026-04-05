@@ -11,8 +11,6 @@ const ServicesSection = ({ data, whatsapp, sectionData }) => {
   ];
 
   const services = data && data.length > 0 ? data : defaultServices;
-  const title = sectionData?.servicesTitle || "Descubra a beleza em cada fase da sua vida.";
-  const subtitle = sectionData?.servicesSubtitle || "Serviços fotográficos especializados com foco em sensibilidade, naturalidade e elegância.";
 
   return (
     <section className="py-24 md:py-36 bg-white overflow-hidden" id="servicos">
@@ -26,10 +24,15 @@ const ServicesSection = ({ data, whatsapp, sectionData }) => {
           >
             <span className="text-primary-600 font-sans tracking-[0.2em] text-xs uppercase font-medium mb-4 block">Especialidades</span>
             <h2 className="text-4xl md:text-5xl font-serif text-primary-900 font-light mb-8 leading-tight">
-              {title}
+              {sectionData?.servicesTitle ? (
+                 <span dangerouslySetInnerHTML={{ __html: sectionData.servicesTitle.replace(/\n/g, '<br/>') }} />
+              ) : (
+                <>Descubra a beleza em <br className="hidden md:block"/>
+                <span className="italic text-primary-600 font-serif">cada fase da sua vida.</span></>
+              )}
             </h2>
             <p className="text-primary-700 text-lg font-light leading-relaxed">
-              {subtitle}
+              {sectionData?.servicesSubtitle || "Serviços fotográficos especializados com foco em sensibilidade, naturalidade e elegância para gestantes, famílias e casamentos civis."}
             </p>
           </motion.div>
         </div>
