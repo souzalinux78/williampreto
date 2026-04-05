@@ -16,6 +16,8 @@ router.get('/home-data', async (req, res) => {
     });
     const testimonials = await prisma.testimonial.findMany({ where: { active: true } });
     const faqs = await prisma.faq.findMany({ where: { active: true } });
+    const landingPageSections = await prisma.landingPageSection.findFirst() || {};
+    const whyChooseItems = await prisma.whyChooseItem.findMany({ where: { active: true }, orderBy: { order: 'asc' } });
 
     res.json({
       siteSettings,
@@ -25,7 +27,9 @@ router.get('/home-data', async (req, res) => {
       portfolioCategories,
       portfolioItems,
       testimonials,
-      faqs
+      faqs,
+      landingPageSections,
+      whyChooseItems
     });
   } catch (error) {
     console.error('ERRO CRÍTICO NO BACKEND:', error);

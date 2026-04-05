@@ -125,6 +125,7 @@ createCrudRoutes('awards', 'award');
 createCrudRoutes('portfolio-categories', 'portfolioCategory');
 createCrudRoutes('testimonials', 'testimonial');
 createCrudRoutes('faqs', 'faq');
+createCrudRoutes('why-choose', 'whyChooseItem');
 
 // Portfólio requer 'include' das categorias no List
 router.get('/portfolio-items', async (req, res) => {
@@ -160,6 +161,20 @@ router.put('/hero', async (req, res) => {
     let item = await prisma.heroSection.findFirst();
     if (item) item = await prisma.heroSection.update({ where: { id: item.id }, data });
     else item = await prisma.heroSection.create({ data });
+    res.json(item);
+  } catch (e) { res.status(500).json({ error: 'Erro', details: e.message }); }
+});
+
+router.get('/landing-page-sections', async (req, res) => {
+  try { const item = await prisma.landingPageSection.findFirst(); res.json(item || {}); }
+  catch (e) { res.status(500).json({ error: 'Erro' }); }
+});
+router.put('/landing-page-sections', async (req, res) => {
+  try {
+    const { id, createdAt, updatedAt, ...data } = req.body;
+    let item = await prisma.landingPageSection.findFirst();
+    if (item) item = await prisma.landingPageSection.update({ where: { id: item.id }, data });
+    else item = await prisma.landingPageSection.create({ data });
     res.json(item);
   } catch (e) { res.status(500).json({ error: 'Erro', details: e.message }); }
 });

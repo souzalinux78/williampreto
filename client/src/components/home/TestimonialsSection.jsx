@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const TestimonialsSection = ({ data = [] }) => {
+const TestimonialsSection = ({ data = [], sectionData }) => {
   const defaultTestimonials = [
     { 
       id: 1, 
@@ -35,11 +35,15 @@ const TestimonialsSection = ({ data = [] }) => {
            className="text-center mb-20"
         >
           <span className="text-primary-500 font-sans tracking-[0.2em] font-medium uppercase text-xs">
-            Depoimentos Reais
+            {sectionData?.testimonialsSubtitle || 'Depoimentos Reais'}
           </span>
           <h2 className="text-4xl md:text-5xl font-serif text-primary-900 font-light mt-6 mx-auto leading-tight">
-            Palavras de quem <br/>
-            <span className="italic text-primary-600">viveu a experiência</span>
+            {sectionData?.testimonialsTitle ? (
+              <span dangerouslySetInnerHTML={{ __html: sectionData.testimonialsTitle.replace(/\n/g, '<br/>') }} />
+            ) : (
+              <>Palavras de quem <br/>
+              <span className="italic text-primary-600">viveu a experiência</span></>
+            )}
           </h2>
           <div className="w-16 h-[1px] bg-primary-300 mx-auto mt-8"></div>
         </motion.div>

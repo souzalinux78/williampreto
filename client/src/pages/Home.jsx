@@ -32,7 +32,7 @@ const Home = () => {
     return <Loading />;
   }
 
-  const { siteSettings, heroSection, services, awards, portfolioItems, testimonials, faqs } = data;
+  const { siteSettings, heroSection, services, awards, portfolioItems, testimonials, faqs, landingPageSections, whyChooseItems } = data;
 
   if (!siteSettings) {
     return (
@@ -87,13 +87,13 @@ const Home = () => {
       
       <div className="min-h-screen">
         <HeroSection data={heroSection} settings={siteSettings} />
-        <AboutSection data={siteSettings} heroImage={heroSection.imageUrl} />
+        <AboutSection data={siteSettings} heroImage={heroSection.imageUrl} sectionData={landingPageSections} />
         <ServicesSection data={services} whatsapp={siteSettings.whatsapp} />
         <AwardsSection data={awards} />
-        <WhyChooseSection />
+        <WhyChooseSection data={whyChooseItems} sectionData={landingPageSections} />
         <PortfolioSection data={portfolioItems} />
-        <TestimonialsSection data={testimonials} />
-        <LocationSection city={siteSettings.cityRegion} />
+        <TestimonialsSection data={testimonials} sectionData={landingPageSections} />
+        <LocationSection city={siteSettings.cityRegion} sectionData={landingPageSections} />
         <CtaSection texts={siteSettings} />
       </div>
     </>

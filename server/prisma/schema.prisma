@@ -99,6 +99,43 @@ model Faq {
   updatedAt DateTime @updatedAt
 }
 
+model WhyChooseItem {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @db.Text
+  icon        String?  // Optional: lucide icon name
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LandingPageSection {
+  id                Int      @id @default(autoincrement())
+  
+  // About Section
+  aboutBadge        String   @default("Especialista em Gestantes")
+  aboutTitle        String   @default("Especialista em eternizar fases únicas.")
+  aboutQuote        String   @default("Delicadeza que transcende.")
+  aboutImage        String?
+  
+  // Why Choose Section
+  whyChooseBadge    String   @default("Por que escolher William Preto")
+  whyChooseTitle    String   @default("Mais do que um ensaio, uma experiência.")
+  whyChooseImage    String?
+  
+  // Testimonials Section
+  testimonialsTitle    String   @default("O que dizem nossas clientes")
+  testimonialsSubtitle String   @default("Histórias reais eternizadas em cada clique")
+  
+  // Location Section
+  locationTitle        String   @default("Onde criamos histórias")
+  locationSubtitle     String   @default("Nosso estúdio é um refúgio planejado para o seu conforto.")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
 model LeadLog {
   id        Int      @id @default(autoincrement())
   name      String?

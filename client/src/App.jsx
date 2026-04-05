@@ -26,6 +26,8 @@ const AdminPortfolio = React.lazy(() => import('./pages/admin/Portfolio'));
 const PortfolioCategorias = React.lazy(() => import('./pages/admin/Categorias'));
 const Depoimentos = React.lazy(() => import('./pages/admin/Depoimentos'));
 const Faqs = React.lazy(() => import('./pages/admin/Faqs'));
+const Sections = React.lazy(() => import('./pages/admin/Sections'));
+const WhyChoose = React.lazy(() => import('./pages/admin/WhyChoose'));
 
 function AppContent() {
   const location = useLocation();
@@ -48,6 +50,8 @@ function AppContent() {
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="sections" element={<Sections />} />
+                <Route path="why-choose" element={<WhyChoose />} />
                 <Route path="configuracoes" element={<Configuracoes />} />
                 <Route path="servicos" element={<Servicos />} />
                 <Route path="premios" element={<Premios />} />

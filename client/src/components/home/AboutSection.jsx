@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const AboutSection = ({ data, heroImage }) => {
+const AboutSection = ({ data, heroImage, sectionData }) => {
   return (
     <section className="py-24 md:py-36 bg-primary-50 relative overflow-hidden">
       {/* Decorative text watermark */}
@@ -21,13 +21,17 @@ const AboutSection = ({ data, heroImage }) => {
             <div className="flex gap-4 mb-4">
               <span className="w-12 h-[1px] bg-primary-400 mt-[10px]"></span>
               <span className="text-primary-600 font-sans tracking-[0.25em] text-xs uppercase font-medium">
-                Especialista em Gestantes
+                {sectionData?.aboutBadge || 'Especialista em Gestantes'}
               </span>
             </div>
             
             <h2 className="text-4xl md:text-5xl lg:text-5xl font-serif text-primary-900 leading-snug font-light mb-8">
-              Especialista <br className="hidden md:block" /> em eternizar <br className="hidden md:block" />
-              <span className="italic text-primary-600">fases únicas.</span>
+              {sectionData?.aboutTitle ? (
+                 <span dangerouslySetInnerHTML={{ __html: sectionData.aboutTitle.replace(/\n/g, '<br/>') }} />
+              ) : (
+                <>Especialista <br className="hidden md:block" /> em eternizar <br className="hidden md:block" />
+                <span className="italic text-primary-600">fases únicas.</span></>
+              )}
             </h2>
 
             <div className="space-y-6 text-primary-800 font-light leading-relaxed text-lg mb-10 border-l border-primary-200 pl-8" 
@@ -51,13 +55,17 @@ const AboutSection = ({ data, heroImage }) => {
             className="relative"
           >
             <div className="aspect-[4/5] bg-primary-200 shadow-xl overflow-hidden rounded-sm relative z-10 w-4/5 ml-auto">
-              <img src={heroImage && heroImage.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${heroImage}` : heroImage || '/hero.png'} alt="A Essência" className="w-full h-full object-cover" />
+              {sectionData?.aboutImage ? (
+                <img src={sectionData.aboutImage.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${sectionData.aboutImage}` : sectionData.aboutImage} alt="A Essência" className="w-full h-full object-cover" />
+              ) : (
+                <img src={heroImage && heroImage.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${heroImage}` : heroImage || '/hero.png'} alt="A Essência" className="w-full h-full object-cover" />
+              )}
             </div>
             <div className="absolute -top-10 -left-10 w-full h-full bg-primary-100 z-0"></div>
             
             {/* Small floating detail block */}
             <div className="absolute -bottom-10 left-0 bg-white p-8 shadow-md z-20 hidden md:block w-64 border border-primary-50">
-              <p className="font-serif text-primary-900 text-xl italic mb-2">"Delicadeza que transcende."</p>
+              <p className="font-serif text-primary-900 text-xl italic mb-2">"{sectionData?.aboutQuote || 'Delicadeza que transcende.'}"</p>
               <p className="text-xs uppercase tracking-widest text-primary-500">— A Essência</p>
             </div>
           </motion.div>
