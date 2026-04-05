@@ -204,11 +204,17 @@ router.get('/landing-page-sections', authenticateToken, async (req, res) => {
       aboutTitle: 'Especialista em eternizar \nfases únicas.',
       aboutBadge: 'Especialista em Gestantes',
       aboutQuote: 'Delicadeza que transcende.',
+      aboutImage: '/maternity.png',
       whyChooseTitle: 'Mais do que um ensaio, \numa experiência.',
+      whyChooseBadge: 'Por que escolher William Preto',
+      whyChooseImage: '/family.png',
       servicesTitle: 'Descubra a beleza em \ncada fase da sua vida.',
+      servicesSubtitle: 'Serviços fotográficos especializados com foco em sensibilidade, naturalidade e elegância para gestantes, famílias e casamentos civis.',
       portfolioTitle: 'Explore Nosso Universo\nAtemporal.',
+      portfolioSubtitle: 'Cada clique é um fragmento de história preservado com a delicadeza de quem entende o valor das memórias que atravessam gerações.',
       locationTitle: 'A natureza como \npano de fundo',
-      locationSubtitle: 'Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes, quanto as mais belas paisagens da região.'
+      locationSubtitle: 'Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes que buscam ensaios intimistas (boudoir maternity), quanto as mais belas paisagens da região para ensaios externos.',
+      locationImage: '/family.png'
     };
 
     if (!item) {
