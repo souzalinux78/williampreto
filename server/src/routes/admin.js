@@ -196,8 +196,28 @@ router.put('/hero', authenticateToken, async (req, res) => {
 });
 
 router.get('/landing-page-sections', authenticateToken, async (req, res) => {
-  try { const item = await prisma.landingPageSection.findFirst(); res.json(item || {}); }
-  catch (e) { res.status(500).json({ error: 'Erro' }); }
+  try { 
+    let item = await prisma.landingPageSection.findFirst(); 
+    
+    // Auto-seed if first time to match the landing page defaults
+    if (!item) {
+      item = await prisma.landingPageSection.create({
+        data: {
+          aboutTitle: 'Especialista em eternizar \nfases únicas.',
+          aboutBadge: 'Especialista em Gestantes',
+          aboutQuote: 'Delicadeza que transcende.',
+          whyChooseTitle: 'Mais do que um ensaio, \numa experiência.',
+          servicesTitle: 'Descubra a beleza em \ncada fase da sua vida.',
+          portfolioTitle: 'Explore Nosso Universo\nAtemporal.',
+          locationTitle: 'A natureza como \npano de fundo',
+          locationSubtitle: 'Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes, quanto as mais belas paisagens da região.'
+        }
+      });
+    }
+    
+    res.json(item || {}); 
+  }
+  catch (e) { res.status(500).json({ error: 'Erro ao buscar seções' }); }
 });
 router.put('/landing-page-sections', authenticateToken, async (req, res) => {
   try {
