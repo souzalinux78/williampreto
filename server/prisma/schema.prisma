@@ -128,10 +128,14 @@ model LandingPageSection {
   testimonialsTitle    String   @default("O que dizem nossas clientes")
   testimonialsSubtitle String   @default("Histórias reais eternizadas em cada clique")
   
-  // Location Section
-  locationTitle        String   @default("Onde criamos histórias")
-  locationSubtitle     String   @default("Nosso estúdio é um refúgio planejado para o seu conforto.")
+  // Services Section
+  servicesTitle        String   @default("Descubra a beleza em cada fase.")
+  servicesSubtitle     String   @default("Serviços fotográficos especializados com foco em sensibilidade, naturalidade e elegância.")
   
+  // Portfolio Section
+  portfolioTitle       String   @default("Nosso Portfólio")
+  portfolioSubtitle    String   @default("Clique para ver mais fotos e detalhes de cada categoria.")
+
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
