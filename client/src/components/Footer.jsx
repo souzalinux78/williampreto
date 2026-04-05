@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
+
+const InstagramIcon = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
 
 const Footer = () => {
   const [settings, setSettings] = useState(null);
@@ -65,7 +73,7 @@ const Footer = () => {
             </div>
             <div className="flex space-x-4 pt-4">
               <a href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener noreferrer" className="group flex items-center space-x-2 text-primary-200 hover:text-white transition-all bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:bg-white/10">
-                <Instagram size={20} />
+                <InstagramIcon size={20} />
                 <span className="text-xs uppercase font-bold tracking-widest">@{instagram}</span>
               </a>
             </div>
