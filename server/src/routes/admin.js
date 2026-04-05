@@ -1,12 +1,13 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const upload = require('../middleware/uploadMiddleware');
+const authenticateToken = require('../middleware/authMiddleware'); // Importando o middleware correto
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // ---- Dashboard Stats ----
-router.get('/stats', async (req, res) => {
+router.get('/stats', authenticateToken, async (req, res) => {
   try {
     // Helper para execuções seguras (evita 500 se tabela não existir)
     const safeQuery = async (fn, fallback) => {
@@ -54,12 +55,12 @@ router.get('/stats', async (req, res) => {
       lastUpdate: lastUpdate ? (lastUpdate.updatedAt || lastUpdate) : null
     });
   } catch (err) {
-    res.status(500).json({ error: 'Erro crítico ao buscar estatísticas' });
+    res.status(500).json({ error: 'Erro crítico ao buscar estatísticas', details: err.message });
   }
 });
 
 // ---- Upload genérico (Retorna URL para ser salva nos cruds) ----
-router.post('/upload', upload.single('image'), (req, res) => {
+router.post('/upload', authenticateToken, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
   const imageUrl = `/uploads/${req.file.filename}`;
   res.json({ imageUrl });
@@ -69,14 +70,32 @@ router.post('/upload', upload.single('image'), (req, res) => {
 const createCrudRoutes = (entityName, modelName) => {
   const model = prisma[modelName];
   
-  // Listar todos
-  router.get(`/${entityName}`, async (req, res) => {
-    try { const items = await model.findMany(); res.json(items); }
+  // Listar todos com Auto-Seed para Vantagens e Serviços
+  router.get(`/${entityName}`, authenticateToken, async (req, res) => {
+    try { 
+      let items = await model.findMany({ 
+        orderBy: entityName === 'why-choose' ? { order: 'asc' } : { id: 'asc' } 
+      }); 
+
+      // AUTO-SEED se estiver vazio (apenas para Vantagens)
+      if (items.length === 0 && entityName === 'why-choose') {
+        await prisma.whyChooseItem.createMany({
+          data: [
+            { title: 'Direção Cuidadosa', description: 'Condução leve e descomplicada para você se sentir à vontade, mesmo sem experiência.', order: 1 },
+            { title: 'Sensibilidade', description: 'Entendimento profundo do momento que você está vivenciando.', order: 2 },
+            { title: 'Olhar Artístico', description: 'Fotografias que parecem pinturas, com um trabalho refinado de cores e luzes.', order: 3 },
+          ]
+        });
+        items = await model.findMany({ orderBy: { order: 'asc' } });
+      }
+
+      res.json(items); 
+    }
     catch (e) { res.status(500).json({ error: `Erro ao listar ${entityName}` }); }
   });
 
   // Obter um
-  router.get(`/${entityName}/:id`, async (req, res) => {
+  router.get(`/${entityName}/:id`, authenticateToken, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
@@ -86,17 +105,14 @@ const createCrudRoutes = (entityName, modelName) => {
   });
 
   // Criar
-  router.post(`/${entityName}`, async (req, res) => {
+  router.post(`/${entityName}`, authenticateToken, async (req, res) => {
     try {
       const { id, createdAt, updatedAt, ...data } = req.body;
-      
-      // Auto-parse numeric IDs in body (ex: categoryId)
       Object.keys(data).forEach(key => {
         if (key.endsWith('Id') && typeof data[key] === 'string' && data[key] !== '') {
           data[key] = parseInt(data[key], 10);
         }
       });
-
       const item = await model.create({ data });
       res.json(item);
     } catch (e) { 
@@ -105,24 +121,17 @@ const createCrudRoutes = (entityName, modelName) => {
   });
 
   // Atualizar
-  router.put(`/${entityName}/:id`, async (req, res) => {
+  router.put(`/${entityName}/:id`, authenticateToken, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
-
       const { id: _, createdAt, updatedAt, ...data } = req.body;
-      
-      // Auto-parse numeric IDs in body (ex: categoryId)
       Object.keys(data).forEach(key => {
         if (key.endsWith('Id') && typeof data[key] === 'string' && data[key] !== '') {
           data[key] = parseInt(data[key], 10);
         }
       });
-
-      const item = await model.update({
-        where: { id },
-        data
-      });
+      const item = await model.update({ where: { id }, data });
       res.json(item);
     } catch (e) { 
       res.status(500).json({ error: `Erro ao atualizar ${entityName}`, details: e.message }); 
@@ -130,7 +139,7 @@ const createCrudRoutes = (entityName, modelName) => {
   });
 
   // Deletar
-  router.delete(`/${entityName}/:id`, async (req, res) => {
+  router.delete(`/${entityName}/:id`, authenticateToken, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
@@ -149,7 +158,7 @@ createCrudRoutes('faqs', 'faq');
 createCrudRoutes('why-choose', 'whyChooseItem');
 
 // Portfólio requer 'include' das categorias no List
-router.get('/portfolio-items', async (req, res) => {
+router.get('/portfolio-items', authenticateToken, async (req, res) => {
   try {
     const items = await prisma.portfolioItem.findMany({ include: { category: true } });
     res.json(items);
@@ -158,11 +167,11 @@ router.get('/portfolio-items', async (req, res) => {
 createCrudRoutes('portfolio-items', 'portfolioItem');
 
 // ---- Configurações de Singleton (Sempre ID 1 ou FindFirst) ----
-router.get('/site-settings', async (req, res) => {
+router.get('/site-settings', authenticateToken, async (req, res) => {
   try { const item = await prisma.siteSetting.findFirst(); res.json(item || {}); }
   catch (e) { res.status(500).json({ error: 'Erro' }); }
 });
-router.put('/site-settings', async (req, res) => {
+router.put('/site-settings', authenticateToken, async (req, res) => {
   try {
     const { id, createdAt, updatedAt, ...data } = req.body;
     let item = await prisma.siteSetting.findFirst();
@@ -172,11 +181,11 @@ router.put('/site-settings', async (req, res) => {
   } catch (e) { res.status(500).json({ error: 'Erro', details: e.message }); }
 });
 
-router.get('/hero', async (req, res) => {
+router.get('/hero', authenticateToken, async (req, res) => {
   try { const item = await prisma.heroSection.findFirst(); res.json(item || {}); }
   catch (e) { res.status(500).json({ error: 'Erro' }); }
 });
-router.put('/hero', async (req, res) => {
+router.put('/hero', authenticateToken, async (req, res) => {
   try {
     const { id, createdAt, updatedAt, ...data } = req.body;
     let item = await prisma.heroSection.findFirst();
@@ -186,11 +195,11 @@ router.put('/hero', async (req, res) => {
   } catch (e) { res.status(500).json({ error: 'Erro', details: e.message }); }
 });
 
-router.get('/landing-page-sections', async (req, res) => {
+router.get('/landing-page-sections', authenticateToken, async (req, res) => {
   try { const item = await prisma.landingPageSection.findFirst(); res.json(item || {}); }
   catch (e) { res.status(500).json({ error: 'Erro' }); }
 });
-router.put('/landing-page-sections', async (req, res) => {
+router.put('/landing-page-sections', authenticateToken, async (req, res) => {
   try {
     const { id, createdAt, updatedAt, ...data } = req.body;
     let item = await prisma.landingPageSection.findFirst();
