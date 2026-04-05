@@ -2,7 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 
-const LocationSection = ({ city }) => {
+const LocationSection = ({ city, sectionData }) => {
+  // Use image from CMS OR fallback to the original family photo
+  const finalImage = sectionData?.locationImage ? (sectionData.locationImage.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${sectionData.locationImage}` : sectionData.locationImage) : "/family.png";
+
   return (
     <section className="py-24 md:py-36 bg-white relative">
       <div className="container mx-auto px-6 md:px-12">
@@ -13,9 +16,9 @@ const LocationSection = ({ city }) => {
              viewport={{ once: true, margin: '-100px' }}
              className="relative"
           >
-            <div className="aspect-[4/3] bg-primary-100 overflow-hidden relative group">
-               <img src="/nature.png" alt="Locações em Bragança Paulista" className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105" />
-               <div className="absolute inset-0 bg-primary-900/20"></div>
+            <div className="aspect-[4/3] bg-primary-100 overflow-hidden relative group shadow-2xl">
+               <img src={finalImage} alt="Locações em Bragança Paulista" className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105" />
+               <div className="absolute inset-0 bg-primary-900/10"></div>
             </div>
             
             {/* Minimal coordinate / location sticker */}
@@ -36,16 +39,26 @@ const LocationSection = ({ city }) => {
               Nosso Estúdio e Externas
             </span>
             <h2 className="text-4xl md:text-5xl font-serif text-primary-900 font-light mb-8 leading-tight">
-              A natureza como <br className="hidden lg:block"/>
-              <span className="italic text-primary-600 font-serif">pano de fundo</span>
+              {sectionData?.locationTitle ? (
+                 <span dangerouslySetInnerHTML={{ __html: sectionData.locationTitle.replace(/\n/g, '<br/>') }} />
+              ) : (
+                <>A natureza como <br className="hidden lg:block"/>
+                <span className="italic text-primary-600 font-serif">pano de fundo</span></>
+              )}
             </h2>
             <div className="space-y-6 text-primary-700 font-light leading-relaxed">
-              <p>
-                Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes que buscam ensaios intimistas (boudoir maternity), quanto as mais belas paisagens da região para ensaios externos.
-              </p>
-              <p>
-                A escolha do local é sempre conversada e alinhada ao estilo de cada família, garantindo segurança e tranquilidade durante toda a sessão fotográfica.
-              </p>
+              {sectionData?.locationSubtitle ? (
+                 <div dangerouslySetInnerHTML={{ __html: sectionData.locationSubtitle.replace(/\n/g, '<br/>') }} />
+              ) : (
+                <>
+                  <p>
+                    Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes que buscam ensaios intimistas (boudoir maternity), quanto as mais belas paisagens da região para ensaios externos.
+                  </p>
+                  <p>
+                    A escolha do local é sempre conversada e alinhada ao estilo de cada família, garantindo segurança e tranquilidade durante toda a sessão fotográfica.
+                  </p>
+                </>
+              )}
             </div>
             <div className="w-16 h-[1px] bg-primary-300 mt-10 mb-8"></div>
             <p className="text-primary-900 font-medium italic font-serif text-xl border-l-2 border-primary-400 pl-6">
