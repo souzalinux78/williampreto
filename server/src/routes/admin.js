@@ -219,27 +219,19 @@ router.get('/landing-page-sections', authenticateToken, async (req, res) => {
 
     if (!item) {
       item = await prisma.landingPageSection.create({ data: defaults });
-    } else {
-      // If any of the main texts are missing, we "repair" the record with defaults
-      let needsRepair = false;
-      const updateData = {};
-      
-      for (const key in defaults) {
-        if (!item[key]) {
-          updateData[key] = defaults[key];
-          needsRepair = true;
-        }
-      }
-
-      if (needsRepair) {
-        item = await prisma.landingPageSection.update({
-          where: { id: item.id },
-          data: updateData
-        });
-      }
     }
     
-    res.json(item || {}); 
+    // Safety Merge: Always ensure defaults are present if DB has null/empty fields
+    const mergedItem = { ...defaults, ...item };
+    
+    // Remove nulls from the response to prevent blank UI fields
+    Object.keys(mergedItem).forEach(key => {
+      if (mergedItem[key] === null || mergedItem[key] === '') {
+        mergedItem[key] = defaults[key] || '';
+      }
+    });
+
+    res.json(mergedItem); 
   }
   catch (e) { res.status(500).json({ error: 'Erro ao buscar seções' }); }
 });
