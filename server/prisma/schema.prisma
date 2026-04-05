@@ -136,6 +136,20 @@ model LandingPageSection {
   updatedAt         DateTime @updatedAt
 }
 
+model VisitLog {
+  id        Int      @id @default(autoincrement())
+  ip        String?
+  userAgent String?  @db.Text
+  referer   String?  @db.Text
+  city      String?
+  region    String?
+  country   String?
+  lat       Float?
+  lon       Float?
+  path      String?  @default("/")
+  createdAt DateTime @default(now())
+}
+
 model LeadLog {
   id        Int      @id @default(autoincrement())
   name      String?

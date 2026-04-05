@@ -12,10 +12,23 @@ router.get('/stats', async (req, res) => {
     const portfolioCount = await prisma.portfolioItem.count();
     const testimonialsCount = await prisma.testimonial.count();
     const leadsCount = await prisma.leadLog.count();
+    const visitsCount = await prisma.visitLog.count(); // Total histórico
     
+    // Visitas nos últimos 30 dias (Dashboard)
+    const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const activeVisits = await prisma.visitLog.count({ where: { createdAt: { gte: thirtyDaysAgo } } });
+
     const recentLeads = await prisma.leadLog.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' }
+    });
+
+    // Melhores localizações
+    const locations = await prisma.visitLog.groupBy({
+       by: ['city', 'region'],
+       _count: { id: true },
+       orderBy: { _count: { id: 'desc' } },
+       take: 10
     });
 
     // Gets last updated record from site settings as a proxy for "last updated"
@@ -29,7 +42,10 @@ router.get('/stats', async (req, res) => {
       portfolioCount,
       testimonialsCount,
       leadsCount,
+      visitsCount,
+      activeVisits,
       recentLeads,
+      locations,
       lastUpdate: lastUpdate ? lastUpdate.updatedAt : null
     });
   } catch (err) {

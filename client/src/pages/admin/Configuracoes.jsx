@@ -78,13 +78,13 @@ const Configuracoes = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div className="flex border-b overflow-x-auto">
           <button onClick={() => setActiveTab('seo')} className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'seo' ? 'border-b-2 border-primary-600 text-primary-900 bg-primary-50/30' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
-            <Search size={18} /> <span>SEO & Google</span>
+            <Globe size={18} /> <span>Geral & Social</span>
           </button>
           <button onClick={() => setActiveTab('contact')} className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'contact' ? 'border-b-2 border-primary-600 text-primary-900 bg-primary-50/30' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
-            <MessageCircle size={18} /> <span>Contato & Social</span>
+            <Search size={18} /> <span>SEO & Google Search</span>
           </button>
           <button onClick={() => setActiveTab('hero')} className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'hero' ? 'border-b-2 border-primary-600 text-primary-900 bg-primary-50/30' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
-            <Globe size={18} /> <span>Seção Hero (Topo)</span>
+            <MessageCircle size={18} /> <span>Seção Hero (Topo)</span>
           </button>
           <button onClick={() => setActiveTab('about')} className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'about' ? 'border-b-2 border-primary-600 text-primary-900 bg-primary-50/30' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
             <Shield size={18} /> <span>Institucional / Quem Somos</span>
@@ -93,39 +93,42 @@ const Configuracoes = () => {
 
         <form onSubmit={handleSave} className="p-8">
            {activeTab === 'seo' && (
-              <div className="space-y-6 animate-in fade-in duration-500 max-w-2xl">
-                 <div>
-                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Título do Site (SEO Title)</label>
-                    <input type="text" value={settings.seoTitle || ''} onChange={e => setSettings({...settings, seoTitle: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Recomendado: Máximo 60 caracteres</p>
-                 </div>
-                 <div>
-                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Descrição Meta (SEO Description)</label>
-                    <textarea rows="4" value={settings.seoDescription || ''} onChange={e => setSettings({...settings, seoDescription: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none leading-relaxed" />
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Recomendado: Entre 120 e 160 caracteres</p>
-                 </div>
-              </div>
-           )}
-
-           {activeTab === 'contact' && (
               <div className="space-y-6 animate-in fade-in duration-500">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-primary-50/50 p-6 rounded-lg border border-primary-100">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Usuário Instagram (sem @)</label>
+                      <input type="text" value={settings.instagram || ''} onChange={e => setSettings({...settings, instagram: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" placeholder="Ex: williampreto_fotografo" />
+                      <p className="text-[10px] text-gray-400 mt-1 uppercase">Link do seu perfil no Instagram</p>
+                    </div>
                     <div>
                       <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">WhatsApp de Atendimento</label>
                       <input type="text" value={settings.whatsapp || ''} onChange={e => setSettings({...settings, whatsapp: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Usuário Instagram (sem @)</label>
-                      <input type="text" value={settings.instagram || ''} onChange={e => setSettings({...settings, instagram: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cidade / Região (Exibido no rodapé/home)</label>
+                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cidade / Região</label>
                       <input type="text" value={settings.cityRegion || ''} onChange={e => setSettings({...settings, cityRegion: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Texto do Botão CTA (Fale Conosco)</label>
                       <input type="text" value={settings.ctaText || ''} onChange={e => setSettings({...settings, ctaText: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
                     </div>
+                 </div>
+                 <div className="pt-4">
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nome Completo do Profissional</label>
+                    <input type="text" value={settings.photographerName || ''} onChange={e => setSettings({...settings, photographerName: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none max-w-md" />
+                 </div>
+              </div>
+           )}
+
+           {activeTab === 'contact' && (
+              <div className="space-y-6 animate-in fade-in duration-500 max-w-2xl">
+                 <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Título do Site (SEO Title)</label>
+                    <input type="text" value={settings.seoTitle || ''} onChange={e => setSettings({...settings, seoTitle: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none" />
+                 </div>
+                 <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Descrição Meta (SEO Description)</label>
+                    <textarea rows="4" value={settings.seoDescription || ''} onChange={e => setSettings({...settings, seoDescription: e.target.value})} className="w-full border-gray-200 border p-3 rounded-sm focus:ring-1 focus:ring-primary-500 outline-none leading-relaxed" />
                  </div>
               </div>
            )}
