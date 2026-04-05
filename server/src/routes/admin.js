@@ -199,20 +199,38 @@ router.get('/landing-page-sections', authenticateToken, async (req, res) => {
   try { 
     let item = await prisma.landingPageSection.findFirst(); 
     
-    // Auto-seed if first time to match the landing page defaults
+    // Auto-seed or repair if data is missing/empty
+    const defaults = {
+      aboutTitle: 'Especialista em eternizar \nfases únicas.',
+      aboutBadge: 'Especialista em Gestantes',
+      aboutQuote: 'Delicadeza que transcende.',
+      whyChooseTitle: 'Mais do que um ensaio, \numa experiência.',
+      servicesTitle: 'Descubra a beleza em \ncada fase da sua vida.',
+      portfolioTitle: 'Explore Nosso Universo\nAtemporal.',
+      locationTitle: 'A natureza como \npano de fundo',
+      locationSubtitle: 'Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes, quanto as mais belas paisagens da região.'
+    };
+
     if (!item) {
-      item = await prisma.landingPageSection.create({
-        data: {
-          aboutTitle: 'Especialista em eternizar \nfases únicas.',
-          aboutBadge: 'Especialista em Gestantes',
-          aboutQuote: 'Delicadeza que transcende.',
-          whyChooseTitle: 'Mais do que um ensaio, \numa experiência.',
-          servicesTitle: 'Descubra a beleza em \ncada fase da sua vida.',
-          portfolioTitle: 'Explore Nosso Universo\nAtemporal.',
-          locationTitle: 'A natureza como \npano de fundo',
-          locationSubtitle: 'Atendemos em Bragança Paulista e toda a região, oferecendo tanto um estúdio confortável e climatizado para bebês e gestantes, quanto as mais belas paisagens da região.'
+      item = await prisma.landingPageSection.create({ data: defaults });
+    } else {
+      // If any of the main texts are missing, we "repair" the record with defaults
+      let needsRepair = false;
+      const updateData = {};
+      
+      for (const key in defaults) {
+        if (!item[key]) {
+          updateData[key] = defaults[key];
+          needsRepair = true;
         }
-      });
+      }
+
+      if (needsRepair) {
+        item = await prisma.landingPageSection.update({
+          where: { id: item.id },
+          data: updateData
+        });
+      }
     }
     
     res.json(item || {}); 
