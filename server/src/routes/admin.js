@@ -8,34 +8,39 @@ const router = express.Router();
 // ---- Dashboard Stats ----
 router.get('/stats', async (req, res) => {
   try {
-    const servicesCount = await prisma.service.count();
-    const portfolioCount = await prisma.portfolioItem.count();
-    const testimonialsCount = await prisma.testimonial.count();
-    const leadsCount = await prisma.leadLog.count();
-    const visitsCount = await prisma.visitLog.count(); // Total histórico
-    
-    // Visitas nos últimos 30 dias (Dashboard)
-    const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const activeVisits = await prisma.visitLog.count({ where: { createdAt: { gte: thirtyDaysAgo } } });
+    // Helper para execuções seguras (evita 500 se tabela não existir)
+    const safeQuery = async (fn, fallback) => {
+       try { return await fn(); } catch (e) { return fallback; }
+    };
 
-    const recentLeads = await prisma.leadLog.findMany({
+    const servicesCount = await safeQuery(() => prisma.service.count(), 0);
+    const portfolioCount = await safeQuery(() => prisma.portfolioItem.count(), 0);
+    const testimonialsCount = await safeQuery(() => prisma.testimonial.count(), 0);
+    const leadsCount = await safeQuery(() => prisma.leadLog.count(), 0);
+    
+    // Visitas (Tabela nova, pode não existir se não migrou)
+    const visitsCount = await safeQuery(() => prisma.visitLog.count(), 0);
+    const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const activeVisits = await safeQuery(() => prisma.visitLog.count({ where: { createdAt: { gte: thirtyDaysAgo } } }), 0);
+
+    const recentLeads = await safeQuery(() => prisma.leadLog.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' }
-    });
+    }), []);
 
     // Melhores localizações
-    const locations = await prisma.visitLog.groupBy({
+    const locations = await safeQuery(() => prisma.visitLog.groupBy({
        by: ['city', 'region'],
        _count: { id: true },
        orderBy: { _count: { id: 'desc' } },
        take: 10
-    });
+    }), []);
 
     // Gets last updated record from site settings as a proxy for "last updated"
-    const lastUpdate = await prisma.siteSetting.findFirst({
+    const lastUpdate = await safeQuery(() => prisma.siteSetting.findFirst({
       orderBy: { updatedAt: 'desc' },
       select: { updatedAt: true }
-    });
+    }), null);
 
     res.json({
       servicesCount,
@@ -46,10 +51,10 @@ router.get('/stats', async (req, res) => {
       activeVisits,
       recentLeads,
       locations,
-      lastUpdate: lastUpdate ? lastUpdate.updatedAt : null
+      lastUpdate: lastUpdate ? (lastUpdate.updatedAt || lastUpdate) : null
     });
   } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+    res.status(500).json({ error: 'Erro crítico ao buscar estatísticas' });
   }
 });
 

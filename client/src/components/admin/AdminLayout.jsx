@@ -15,7 +15,7 @@ const AdminLayout = () => {
     { path: '/admin/dashboard', icon: <LayoutDashboard size={20}/>, label: 'Dashboard' },
     { path: '/admin/sections', icon: <LayoutDashboard size={20}/>, label: 'Editor Landing Page' },
     { path: '/admin/why-choose', icon: <HelpCircle size={20}/>, label: 'Vantagens (Por que eu?)' },
-    { path: '/admin/configuracoes', icon: <Settings size={20}/>, label: 'Configurações (SEO)' },
+    { path: '/admin/configuracoes', icon: <Settings size={20}/>, label: 'Configurações & Instagram' },
     { path: '/admin/servicos', icon: <Camera size={20}/>, label: 'Serviços' },
     { path: '/admin/premios', icon: <Award size={20}/>, label: 'Prêmios' },
     { path: '/admin/portfolio', icon: <MapPin size={20}/>, label: 'Portfólio' },
